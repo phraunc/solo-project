@@ -15,10 +15,11 @@ router.get("/", (req, res) => {
     .query(sqlText)
     .then((result) => {
       res.send(result.rows);
+      console.log('here is my information', result.rows);
     })
     .catch((err) => {
       console.log("getting errors!", err);
-      res.sendStatus(00);
+      res.sendStatus(500);
     });
 });
 
@@ -27,9 +28,9 @@ router.get("/", (req, res) => {
 router.post("/", rejectUnauthenticated, (req, res) => {
     //Im not really sure how the time stamp comes in; do I need to insert it as part of the table, will it show up on the DOM or is 
     //there code that I need to write/alter to get it to work?  
-    const sqlText = `INSERT INTO "message" ("category","message","profile_id","recipient_id")
-    VALUES($1, $2, $3, $4)`;
-    const sqlParams = [req.body.category, req.body.message, req.body.recipient_id, req.user.id]
+    const sqlText = `INSERT INTO "message" ("time_stamp","category","message","profile_id","recipient_id")
+    VALUES($1, $2, $3, $4, $5)`;
+    const sqlParams = [req.body.time_stamp, req.body.category, req.body.message, req.body.recipient_id, req.user.id]
 
     pool
     .query(sqlText, sqlParams)
