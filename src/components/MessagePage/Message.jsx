@@ -9,9 +9,10 @@ function MessagePage() {
 
   //useSelector to pull messageItems from the messageItems store
   const messageItems = useSelector((store) => store.messageItems);
-
+  console.log("here are my message items", messageItems);
   // use selector to pull userID from information generated on login. NOT used for anything sensitive.
   const userID = useSelector((store) => store.user.id);
+  console.log(userID);
 
   // on page load, run 'FETCH_MESSAGE' -> results in rendering of MESSAGE.
   useEffect(() => {
@@ -20,28 +21,26 @@ function MessagePage() {
     });
   }, []);
 
-  const [newCategory, setNewCategory] = useState('');
-  const [newMessage, inputNewMessage] = useState('');
+  const [newCategory, setNewCategory] = useState("");
+  const [newMessage, inputNewMessage] = useState("");
 
-  return(
-
+  return (
     <>
-  <div className='container'>
-    <h2>Messages</h2>
-  </div>
-    {messageItems.length && 
-    messageItems.map((item)=>{
-        <div key={item.id}>
-            <p>{item.time_stamp}</p>
-            <p>{item.category}</p>
-            <p>{item.message}</p>
-            <p>{item.profile_id}</p>
-            <p>{item.recipient_id}</p>
-
-</div>
-    })};
-  </>
-  ) 
+      <div className="container">
+        <h2>Messages</h2>
+      </div>
+      {messageItems.length &&
+        messageItems.map((item) => {
+            return(
+          <div key={item.id}>
+            <p>
+              {item.time_stamp} : {item.category} : {item.message} :{" "}
+              {item.profile_id} : {item.recipient_id}
+            </p>
+          </div>)
+        })}
+    </>
+  );
 }
 
 export default MessagePage;

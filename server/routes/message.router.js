@@ -8,7 +8,7 @@ const {
 
 //Getting all the message and details from the DB to send to the GET component in SRC. **update the file name**
 //GET route
-router.get("/", (req, res) => {
+router.get("/", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT * FROM "message"`;
 
   pool
