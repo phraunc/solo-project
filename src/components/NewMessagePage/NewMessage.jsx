@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
-import Alert from 'react-pop-up-alert';
+
+
 function NewMessage() {
   
   const dispatch = useDispatch();
@@ -29,8 +30,8 @@ function NewMessage() {
     history.push('/message')
   };
 
-  function alert(){
-
+  function handleAlert(){
+    alert('Got it bitch!!')
   }
 
   return (
@@ -65,7 +66,7 @@ function NewMessage() {
           onChange={(event) => inputNewProfileId(event.target.value)}
           placeholder="sender"
         />
-        <button type="submit" onClick={()=>alert('congrats!')}>Submit</button>
+        <button type="submit" onClick={handleAlert}>Submit</button>
       </form>
     </>
   );
