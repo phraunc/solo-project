@@ -20,6 +20,7 @@ import LandingPage from "../LandingPage/LandingPage";
 import LoginPage from "../LoginPage/LoginPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import MessagePage from "../MessagePage/Message";
+import NewMessage from "../NewMessagePage/NewMessage";
 
 import "./App.css";
 
@@ -68,8 +69,13 @@ function App() {
           >
             <InfoPage />
           </ProtectedRoute>
+          
           <ProtectedRoute exact path="/message">
             <MessagePage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/newmessage">
+            <NewMessage />
           </ProtectedRoute>
 
           <Route exact path="/login">
