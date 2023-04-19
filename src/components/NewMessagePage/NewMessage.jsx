@@ -22,7 +22,7 @@ function NewMessage() {
       payload: {
         category: newCategory,
         message: newMessage,
-        profile_id: newProfileId,
+        // profile_id: newProfileId,
         recipient_id: newRecipientId,
       },
     });
@@ -60,12 +60,12 @@ function NewMessage() {
           onChange={(event) => inputNewMessage(event.target.value)}
           placeholder="new Message"
         />
-        <input
+        {/* <input
           type="text"
           value={newProfileId}
           onChange={(event) => inputNewProfileId(event.target.value)}
           placeholder="sender"
-        />
+        /> */}
         <button type="submit" onClick={handleAlert}>Submit</button>
       </form>
     </>

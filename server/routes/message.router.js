@@ -45,4 +45,19 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     })
 });
 
+router.delete("/:id",rejectUnauthenticated, (req, res)=>{
+  const sqlText = `DELETE FROM "message" WHERE (id=$1 AND profile_id=$2)`;
+  const sqlParams = [req.params.id, req.user.id]
+
+  pool
+  .query(sqlText, sqlParams)
+  .then((result) =>{
+    res.sendStatus(200)
+  })
+  .catch((err)=>{
+    console.log('error deleting message', err)
+    res.sendStatus(500)
+  })
+})
+
 module.exports = router;

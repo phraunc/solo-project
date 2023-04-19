@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 function MessagePage() {
   //Set up Dispatch
@@ -24,32 +24,45 @@ function MessagePage() {
     });
   }, []);
 
-const newMessage = (event) => {
-    history.push('/newmessage')
-};
+  const deleteMessage = (event) => {
+    console.log("event.target.id", event.target.id);
+    dispatch({ type: "DELETE_MESSAGE", payload: event.target.id });
+  };
 
-return (
-  <>
-    <div className="container">
-      <h2>Messages</h2>
-    </div>
-    {messageItems.length &&
-      messageItems.map((item) => {
-        const timestamp = new Date(item.time_stamp).toLocaleString();
-        return (
-          <div key={item.id}>
-            <p>
-              {timestamp} : {item.category} : {item.message} : {userID.username}{" "}
-              : {item.recipient_id}
-            </p>
-          </div>
-        );
-      })}
+  const newMessage = (event) => {
+    history.push("/newmessage");
+  };
+
+  return (
+    <>
+      <div className="container">
+        <h2>Messages</h2>
+      </div>
+      {messageItems.length &&
+        messageItems.map((item) => {
+          const timestamp = new Date(item.time_stamp).toLocaleString();
+          return (
+            <div key={item.id}>
+              <p>
+                {timestamp} : {item.category} : {item.message} :{" "}
+                {item.profile_id} : {item.recipient_id}
+              </p>
+              {userID.id === item.profile_id ? 
+                <button id={item.id} onClick={deleteMessage}>
+                  Delete Message
+                </button>
+               :
+              <></>
+              }
+              {/* <button id={item.id}onClick={deleteMessage}>delete</button> */}
+            </div>
+          );
+        })}
       <div>
         <button onClick={newMessage}>New Message</button>
       </div>
-  </>
-);
-    }
+    </>
+  );
+}
 
 export default MessagePage;
