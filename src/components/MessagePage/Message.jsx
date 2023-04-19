@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 function MessagePage() {
   //Set up Dispatch
   const dispatch = useDispatch();
+  // history to go different pages as needed.
   const history = useHistory();
 
   //useSelector to pull messageItems from the messageItems store
@@ -14,6 +15,7 @@ function MessagePage() {
   console.log("here are my message items", messageItems);
 
   // use selector to pull userID from information generated on login. NOT used for anything sensitive.
+  //  Keeping in mind that this is the whole object of the user in the store.
   const userID = useSelector((store) => store.user);
   console.log(userID);
 
@@ -41,19 +43,23 @@ function MessagePage() {
       {messageItems.length &&
         messageItems.map((item) => {
           const timestamp = new Date(item.time_stamp).toLocaleString();
+          const sender = userID.username;
+          const recipients = userID.username 
           return (
             <div key={item.id}>
               <p>
-                {timestamp} : {item.category} : {item.message} :{" "}
-                {item.profile_id} : {item.recipient_id}
+                {timestamp} :From:  {recipients} : {item.category} : {item.message} :{" "}
               </p>
-              {userID.id === item.profile_id ? 
+              {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
+              input userID.id to get the specific id from the store.  userID is the whole object and I just
+              wanted the 'id' portion of the object.  */}
+              {userID.id === item.profile_id ? (
                 <button id={item.id} onClick={deleteMessage}>
                   Delete Message
                 </button>
-               :
-              <></>
-              }
+              ) : (
+                <></>
+              )}
               {/* <button id={item.id}onClick={deleteMessage}>delete</button> */}
             </div>
           );
