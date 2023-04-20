@@ -9,10 +9,11 @@ const {
 //Getting all the message and details from the DB to send to the GET component in SRC. **update the file name**
 //GET route
 router.get("/", rejectUnauthenticated, (req, res) => {
-  const sqlText = `SELECT * FROM "message"`;
+  const sqlText = `SELECT * FROM "message" WHERE profile_id = $1`;
+  const sqlParams = [req.user.id];
 
   pool
-    .query(sqlText)
+    .query(sqlText, sqlParams)
     .then((result) => {
       res.send(result.rows);
       console.log('here is my information', result.rows);
