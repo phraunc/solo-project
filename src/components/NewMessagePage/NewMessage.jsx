@@ -19,10 +19,6 @@ function NewMessage() {
   const addNewMessage = (event) => {
     event.preventDefault();
 
-    if(userID.id == newRecipientId){
-
-      
-    }
 
 
     dispatch({
@@ -39,7 +35,7 @@ function NewMessage() {
   };
 
   function handleAlert() {
-    alert("Got it bitch!!");
+    alert("Message Sent!");
   }
 
   return (

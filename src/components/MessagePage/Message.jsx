@@ -46,12 +46,12 @@ function MessagePage() {
           return (
             <div key={item.id}>
               <p>
-                {timestamp} From: : {item.category} : {item.message} 
+                {timestamp} From: {item.username} : {item.category} : {item.message} 
               </p>
               {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
               input userID.id to get the specific id from the store.  userID is the whole object and I just
               wanted the 'id' portion of the object.  */}
-              {userID.id === item.profile_id ? (
+              {userID.id === item.recipient_id ? (
                 <button id={item.id} onClick={deleteMessage}>
                   Delete Message
                 </button>
