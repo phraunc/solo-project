@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
-
+import { useHistory } from "react-router-dom";
 
 function NewMessage() {
-  
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [newCategory, setNewCategory] = useState("");
   const [newMessage, inputNewMessage] = useState("");
-  //   const [newTimeStamp, inputNewTimeStamp] = useState('');
+
   const [newProfileId, inputNewProfileId] = useState("");
   const [newRecipientId, inputNewRecipientId] = useState("");
+
+  const userID = useSelector((store) => store.user);
+
+
 
   const addNewMessage = (event) => {
     event.preventDefault();
 
+    if(userID.id == newRecipientId){
+
+      
+    }
+
+
     dispatch({
-      type: 'ADD_MESSAGE',
+      type: "ADD_MESSAGE",
       payload: {
         category: newCategory,
         message: newMessage,
@@ -27,11 +35,11 @@ function NewMessage() {
       },
     });
 
-    history.push('/message')
+    history.push("/message");
   };
 
-  function handleAlert(){
-    alert('Got it bitch!!')
+  function handleAlert() {
+    alert("Got it bitch!!");
   }
 
   return (
@@ -66,7 +74,9 @@ function NewMessage() {
           onChange={(event) => inputNewProfileId(event.target.value)}
           placeholder="sender"
         /> */}
-        <button type="submit" onClick={handleAlert}>Submit</button>
+        <button type="submit" onClick={handleAlert}>
+          Submit
+        </button>
       </form>
     </>
   );

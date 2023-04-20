@@ -16,7 +16,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     .query(sqlText, sqlParams)
     .then((result) => {
       res.send(result.rows);
-      console.log('here is my information', result.rows);
+      console.log("here is my information", result.rows);
     })
     .catch((err) => {
       console.log("getting errors!", err);
@@ -24,41 +24,85 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+//this is the code that I pulled from online to see if the user was in the data base for me to send a message as well as inputting a name vice a user id.
+//  it seems to work however, i am not sure how i will be able to display the name of the sender to show up on the DOM. 
+router.post("/send-message", async (req, res) => {
+  const { users, message } = req.body;
 
-//adding a message and message information to be sent. 
-router.post("/", rejectUnauthenticated, (req, res) => {
-    //Im not really sure how the time stamp comes in; do I need to insert it as part of the table, will it show up on the DOM or is 
-    //there code that I need to write/alter to get it to work?  
+  // Check if each user is present in the database
+  for (const user of users) {
+    let result;
 
-    const sqlText = `INSERT INTO "message" ("category","message","profile_id","recipient_id")
-    VALUES($1, $2, $3, $4 )`;
-    // 
-    const sqlParams = [ req.body.category, req.body.message, req.body.recipient_id, req.user.id];
+    if (user.id) {
+      result = await pool.query("SELECT * FROM users WHERE id = $1", [user.id]);
+    } else {
+      result = await pool.query("SELECT * FROM users WHERE name = $1", [
+        user.name,
+      ]);
+    }
 
-    pool
-    .query(sqlText, sqlParams)
-    .then((result) => {
-        res.sendStatus(201)
-    })
-    .catch((err) => {
-        console.log('error!', err)
-        res.sendStatus(500)
-    })
-});
+    if (result.rowCount === 0) {
+      return res
+        .status(400)
+        .json({
+          error: `User ${user.name || user.id} not found in the database.`,
+        });
+    }
+  }
+  const sqlText = `INSERT INTO "message" ("category","message","profile_id","recipient_id") VALUES($1, $2, $3, $4 )`;
 
-router.delete("/:id",rejectUnauthenticated, (req, res)=>{
-  const sqlText = `DELETE FROM "message" WHERE (id=$1 AND profile_id=$2)`;
-  const sqlParams = [req.params.id, req.user.id]
+  const sqlParams = [
+    req.body.category,
+    req.body.message,
+    req.body.recipient_id,
+    req.user.id,
+  ];
 
   pool
-  .query(sqlText, sqlParams)
-  .then((result) =>{
-    res.sendStatus(200)
-  })
-  .catch((err)=>{
-    console.log('error deleting message', err)
-    res.sendStatus(500)
-  })
-})
+    .query(sqlText, sqlParams)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log("error!", err);
+      res.sendStatus(500);
+    });
+});
+
+// //adding a message and message information to be sent.
+// router.post("/", rejectUnauthenticated, (req, res) => {
+//     //Im not really sure how the time stamp comes in; do I need to insert it as part of the table, will it show up on the DOM or is
+//     //there code that I need to write/alter to get it to work?
+
+//     const sqlText = `INSERT INTO "message" ("category","message","profile_id","recipient_id")
+//     VALUES($1, $2, $3, $4 )`;
+//     //
+//     const sqlParams = [ req.body.category, req.body.message, req.body.recipient_id, req.user.id];
+
+//     pool
+//     .query(sqlText, sqlParams)
+//     .then((result) => {
+//         res.sendStatus(201)
+//     })
+//     .catch((err) => {
+//         console.log('error!', err)
+//         res.sendStatus(500)
+//     })
+// });
+
+router.delete("/:id", rejectUnauthenticated, (req, res) => {
+  const sqlText = `DELETE FROM "message" WHERE (id=$1 AND profile_id=$2)`;
+  const sqlParams = [req.params.id, req.user.id];
+
+  pool
+    .query(sqlText, sqlParams)
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("error deleting message", err);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;
