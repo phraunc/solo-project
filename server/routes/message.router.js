@@ -9,7 +9,7 @@ const {
 //Getting all the message and details from the DB to send to the GET component in SRC. **update the file name**
 //GET route
 router.get("/", rejectUnauthenticated, (req, res) => {
-  const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id FROM "message" 
+  const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
   JOIN "user"
   ON "message".profile_id = "user".id
   WHERE recipient_id = $1 `;

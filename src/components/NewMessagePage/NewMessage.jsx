@@ -19,8 +19,6 @@ function NewMessage() {
   const addNewMessage = (event) => {
     event.preventDefault();
 
-
-
     dispatch({
       type: "ADD_MESSAGE",
       payload: {
@@ -36,22 +34,30 @@ function NewMessage() {
 
   function handleAlert() {
     alert("Message Sent!");
-  }
+  };
 
   return (
     <>
       <form onSubmit={addNewMessage}>
-        {/*             
-            <input
+                    
+            {/* <input
             type="text"
             value={Date.now()}
             onChange={(event)=>inputNewTimeStamp(event.target.value)}/> */}
-        <input
+        {/* <input
           type="text"
           value={newRecipientId}
           onChange={(event) => inputNewRecipientId(event.target.value)}
           placeholder="recipient"
-        />
+        /> */}
+       
+        <select value={newRecipientId} onChange={(event)=> {inputNewRecipientId(event.target.value )
+            console.log(newRecipientId)}} >
+          <option value="">Recipient</option>
+          <option value='13'>Mom</option>
+          <option value='12'>Dad</option>
+        </select>
+       
         <input
           type="text"
           value={newCategory}

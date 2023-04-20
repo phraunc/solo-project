@@ -17,7 +17,6 @@ function MessagePage() {
   // use selector to pull userID from information generated on login. NOT used for anything sensitive.
   //  Keeping in mind that this is the whole object of the user in the store.
   const userID = useSelector((store) => store.user);
-  
 
   // on page load, run 'FETCH_MESSAGE' -> results in rendering of MESSAGE.
   useEffect(() => {
@@ -46,18 +45,22 @@ function MessagePage() {
           return (
             <div key={item.id}>
               <p>
-                {timestamp} From: {item.username} : {item.category} : {item.message} 
-              </p>
-              {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
+                {timestamp} From: {item.username} Category: {item.category} :{" "}
+                Message: {item.message}
+
+                  {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
               input userID.id to get the specific id from the store.  userID is the whole object and I just
               wanted the 'id' portion of the object.  */}
-              {userID.id === item.recipient_id ? (
+                {userID.id === item.recipient_id ? (
                 <button id={item.id} onClick={deleteMessage}>
                   Delete Message
                 </button>
               ) : (
                 <></>
               )}
+              </p>
+            
+             
               {/* <button id={item.id}onClick={deleteMessage}>delete</button> */}
             </div>
           );
