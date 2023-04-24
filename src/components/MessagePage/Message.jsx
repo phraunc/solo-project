@@ -12,6 +12,10 @@ function MessagePage() {
 
   //useSelector to pull messageItems from the messageItems store
   const messageItems = useSelector((store) => store.messageItems);
+
+  //useSelector to pull sent messages for the sentMessage Store to display in the 'Sent Messages' piece on the DOM. 
+  const sentMessage = useSelector((store)=> store.sentMessage)
+
   console.log("here are my message items", messageItems);
 
   // use selector to pull userID from information generated on login. NOT used for anything sensitive.
@@ -24,6 +28,17 @@ function MessagePage() {
       type: "FETCH_MESSAGE",
     });
   }, []);
+
+  useEffect(()=> {
+  
+    dispatch({
+      type:"SENT_MESSAGE",
+      payload: sentMessage,
+    });
+  }, []);
+
+
+
 
   const deleteMessage = (event) => {
     console.log("event.target.id", event.target.id);
@@ -44,27 +59,40 @@ function MessagePage() {
           const timestamp = new Date(item.time_stamp).toLocaleString();
           return (
             <div key={item.id}>
+              <h2>Recieved Messages</h2>
               <p>
                 {timestamp} From: {item.username} Category: {item.category} :{" "}
                 Message: {item.message}
-
-                  {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
+                {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
               input userID.id to get the specific id from the store.  userID is the whole object and I just
               wanted the 'id' portion of the object.  */}
                 {userID.id === item.recipient_id ? (
-                <button id={item.id} onClick={deleteMessage}>
-                  Delete Message
-                </button>
-              ) : (
-                <></>
-              )}
+                  <button id={item.id} onClick={deleteMessage}>
+                    Delete Message
+                  </button>
+                ) : (
+                  <></>
+                )}
               </p>
-            
-             
+
               {/* <button id={item.id}onClick={deleteMessage}>delete</button> */}
             </div>
           );
         })}
+        {sentMessage.length && sentMessage.map((item)=>{
+          const timestamp = new Date(item.time_stamp).toLocaleString();
+          return(
+            <div key={item.id}>
+              <h2>Sent Messages</h2>
+              <p>
+                {timestamp} To: {item.username} Category: {item.category}: {''}
+                Message: {item.message}
+              </p>
+
+            </div>
+          )
+        })}
+
       <div>
         <button onClick={newMessage}>New Message</button>
       </div>

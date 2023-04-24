@@ -16,6 +16,8 @@ function* fetchMessageAgain() {
   }
 }
 
+
+
 function* fetchMessage() {
   //fetching all message items
   yield takeEvery("FETCH_MESSAGE", fetchMessageAgain);

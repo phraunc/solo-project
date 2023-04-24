@@ -5,6 +5,7 @@ import userSaga from './user.saga';
 import fetchMessage from './fetchMessage.saga';
 import postMessage from './post.saga'
 import deleteMessage from './delete.saga';
+import sentMessage from './sentMessage.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -21,5 +22,6 @@ export default function* rootSaga() {
     fetchMessage(),
     postMessage(),
     deleteMessage(),
+    sentMessage(),
   ]);
 }

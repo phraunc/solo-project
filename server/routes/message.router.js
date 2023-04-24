@@ -27,6 +27,27 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
+
+//I want this GET route to be able to show sent messages on the user profile to edit
+router.get("/sent", rejectUnauthenticated, (req, res) => {
+  const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
+  JOIN "user"
+  ON "message".recipient_id = "user".id
+  WHERE profile_id = $1 `;
+  const sqlParams = [req.user.id];
+
+  pool
+    .query(sqlText, sqlParams)
+    .then((result) => {
+      res.send(result.rows);
+      console.log("here is my information", result.rows);
+    })
+    .catch((err) => {
+      console.log("getting errors!", err);
+      res.sendStatus(500);
+    });
+});
+
 //this is the code that I pulled from online to see if the user was in the data base for me to send a message as well as inputting a name vice a user id.
 //  it seems to work however, i am not sure how i will be able to display the name of the sender to show up on the DOM.
 // router.post("/send-message", async (req, res) => {
