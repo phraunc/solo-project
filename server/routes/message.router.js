@@ -118,7 +118,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
-
+// This will be able for the recipeint to delete messages sent by targeteing the id to the reciepient_id to delete.
 router.delete("/:id", rejectUnauthenticated, (req, res) => {
   const sqlText = `DELETE FROM "message" WHERE (id=$1 AND recipient_id=$2)`;
   const sqlParams = [req.params.id, req.user.id];
@@ -133,5 +133,17 @@ router.delete("/:id", rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+
+//This is the EDIT router for the id to be targeted on a user_id (who is logged in) 
+//to edit messages that were sent and then be able to edit them.
+router.put("/:id", rejectUnauthenticated, (req, res)=>{
+  const sqlText = `UPDATE "message" SET "category" = $1, "message"=$2, "recipient_id"=$3 WHERE  "id"=$4, "user_id"=$5`
+  const sqlParams = [req.body.category. req.body.message, req.body.recipient_id, req.params.id, req.user.id]
+
+  pool.query(sqlText, sqlParams)
+  .then((response)=>{res.sendStatus(200)})
+  .catch((error)=>{res.sendStatus(500)})
+})
 
 module.exports = router;
