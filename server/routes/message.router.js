@@ -12,7 +12,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
   JOIN "user"
   ON "message".profile_id = "user".id
-  WHERE recipient_id = $1 `;
+  WHERE recipient_id = $1 LIMIT 5`;
   const sqlParams = [req.user.id];
 
   pool
@@ -33,7 +33,7 @@ router.get("/sent", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
   JOIN "user"
   ON "message".recipient_id = "user".id
-  WHERE profile_id = $1 `;
+  WHERE profile_id = $1 LIMIT 5`;
   const sqlParams = [req.user.id];
 
   pool
@@ -158,6 +158,7 @@ router.put("/:id", rejectUnauthenticated, (req, res)=>{
   const sqlParams = [req.body.category, req.body.message, req.body.recipient_id, req.params.id, req.user.id]
 
   pool.query(sqlText, sqlParams)
+  console.log('sqlText, sqlParams', sqlText, sqlParams)
     .then((response)=>{res.sendStatus(200)})
     .catch((error)=>{res.sendStatus(500)})
 })
