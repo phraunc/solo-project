@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditMessage from "../EditMessage/EditMessage";
+import { Button } from '@mui/material';
 
 function MessagePage() {
   //Set up Dispatch
@@ -99,9 +100,10 @@ function MessagePage() {
               input userID.id to get the specific id from the store.  userID is the whole object and I just
               wanted the 'id' portion of the object.  */}
                 {userID.id === item.recipient_id ? (
-                  <button id={item.id} onClick={deleteMessage}>
-                    Delete Message
-                  </button>
+                  <Button variant="outlined" startIcon={<DeleteIcon />} id={item.id} onClick={deleteMessage}>
+                  Delete
+                </Button>
+                 
                 ) : (
                   <></>
                 )}
@@ -117,11 +119,11 @@ function MessagePage() {
 
         return (
           <div key={item.id}>
-            <p>
+            {/* <p>
               {timestamp} To: {item.username} Category: {item.category}: {""}
               Message: {item.message}
-            </p>
-            {showEditForm ? (
+            </p> */}
+            {messageToEdit.id === item.id ? (
               <EditMessage
                 username={messageToEdit.username}
                 category={messageToEdit.category}
@@ -136,14 +138,10 @@ function MessagePage() {
                       profile_id: messageToEdit.id,
                     },
                   });
-                  setShowEditForm(false);
+                  setMessageToEdit({});
                 }}
               />
             ) : (
-              sentMessage.map((item) => {
-                const timestamp = new Date(item.time_stamp).toLocaleString();
-
-                return (
                   <div key={item.id}>
                     <p>
                       {timestamp} To: {item.username} Category: {item.category}:{" "}
@@ -155,8 +153,6 @@ function MessagePage() {
                       Edit Message
                     </button>
                   </div>
-                );
-              })
             )}
 
             {/* <form

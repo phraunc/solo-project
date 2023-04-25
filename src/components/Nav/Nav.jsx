@@ -35,7 +35,7 @@ function Nav() {
             {user.id && (
               <>
                 <Link className="navLink" to="/message">
-                  Your Crap
+                  Your Messages
                 </Link>
               </>
             )}
