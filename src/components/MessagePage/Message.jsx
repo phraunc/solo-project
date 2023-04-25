@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import EditMessage from "../EditMessage/EditMessage";
 
 function MessagePage() {
   //Set up Dispatch
@@ -22,10 +23,13 @@ function MessagePage() {
   //  Keeping in mind that this is the whole object of the user in the store.
   const userID = useSelector((store) => store.user);
 
-  const [editUserName, SetEditUserName] = useState("");
-  const [editMessage, setEditMessage] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [messageID, setMessageID] = useState("");
+  const [messageToEdit, setMessageToEdit] = useState({});
+  const [showEditForm, setShowEditForm] = useState(false);
+
+  const editSentMessage = (item) => {
+    setMessageToEdit(item);
+    setShowEditForm(true);
+  };
 
   // on page load, run 'FETCH_MESSAGE' -> results in rendering of MESSAGE.
   useEffect(() => {
@@ -38,13 +42,6 @@ function MessagePage() {
     });
   }, []);
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: "SENT_MESSAGE",
-  //     payload: sentMessage,
-  //   });
-  // }, [sentMessage]);
-
   const deleteMessage = (event) => {
     console.log("event.target.id", event.target.id);
     dispatch({ type: "DELETE_MESSAGE", payload: event.target.id });
@@ -54,35 +51,35 @@ function MessagePage() {
     history.push("/newmessage");
   };
 
-  //This is the edit function of hitting submit after the iputs are filled in.  
-    //I want to change this to this a button with an, onClick function and to go to another page. 
-  const editSentMessage = (
-   editUserName,
-   editCategory,
-   editMessage,
-   incommingID
-  ) => {
-    if (editUserName === "") {
-      setEditUserName(incommingUserName);
-    }
+  //This is the edit function of hitting submit after the iputs are filled in.
+  //I want to change this to this a button with an, onClick function and to go to another page.
+  // const editSentMessage = (
+  //   editUserName,
+  //   editCategory,
+  //   editMessage,
+  //   incommingID
+  // ) => {
+  //   if (editUserName === "") {
+  //     setEditUserName(incommingUserName);
+  //   }
 
-    if (editCategory === "") {
-      setEditCategory(incommingCategory);
-    }
+  //   if (editCategory === "") {
+  //     setEditCategory(incommingCategory);
+  //   }
 
-    if (editMessage === "") {
-      setEditMessage(incommingMessage);
-    }
-    dispatch({
-      type: "EDIT_MESSAGE",
-      payload: {
-        username: incommingUserName,
-        category: incommingCategory,
-        message: incommingMessage,
-        profile_id: incommingID,
-      },
-    });
-  };
+  //   if (editMessage === "") {
+  //     setEditMessage(incommingMessage);
+  //   }
+  //   dispatch({
+  //     type: "EDIT_MESSAGE",
+  //     payload: {
+  //       username: incommingUserName,
+  //       category: incommingCategory,
+  //       message: incommingMessage,
+  //       profile_id: incommingID,
+  //     },
+  //   });
+  // };
 
   return (
     <>
@@ -115,51 +112,87 @@ function MessagePage() {
           );
         })}
       <h2>Sent Messages</h2>
-      {
-        sentMessage.map((item) => {
-          const timestamp = new Date(item.time_stamp).toLocaleString();
+      {sentMessage.map((item) => {
+        const timestamp = new Date(item.time_stamp).toLocaleString();
 
-          return (
-            <div key={item.id}>
-              <p>
-                {timestamp} To: {item.username} Category: {item.category}: {""}
-                Message: {item.message}
-              </p>
+        return (
+          <div key={item.id}>
+            <p>
+              {timestamp} To: {item.username} Category: {item.category}: {""}
+              Message: {item.message}
+            </p>
+            {showEditForm ? (
+              <EditMessage
+                username={messageToEdit.username}
+                category={messageToEdit.category}
+                message={messageToEdit.message}
+                onEditMessage={(editUserName, editCategory, editMessage) => {
+                  dispatch({
+                    type: "EDIT_MESSAGE",
+                    payload: {
+                      username: editUserName,
+                      category: editCategory,
+                      message: editMessage,
+                      profile_id: messageToEdit.id,
+                    },
+                  });
+                  setShowEditForm(false);
+                }}
+              />
+            ) : (
+              sentMessage.map((item) => {
+                const timestamp = new Date(item.time_stamp).toLocaleString();
 
-              <form
-                onSubmit={() =>
-                  editSentMessage(
-                    item.id,
-                    item.username,
-                    item.category,
-                    item.message
-                  )
-                }
-                id={item.id}
-              >
-                <input
-                  placeholder="username"
-                  type="text"
-                  value={editUserName}
-                  onChange={(event) => SetEditUserName(event.target.value)}
-                />
-                <input
-                  placeholder="category"
-                  type="text"
-                  value={editCategory}
-                  onChange={(event) => setEditCategory(event.target.value)}
-                />
-                <input
-                  placeholder="message"
-                  type="text"
-                  value={editMessage}
-                  onChange={(event) => setEditMessage(event.target.value)}
-                />
-                <button type="submit">Edit Message</button>
-              </form>
-            </div>
-          );
-        })}
+                return (
+                  <div key={item.id}>
+                    <p>
+                      {timestamp} To: {item.username} Category: {item.category}:{" "}
+                      {""}
+                      Message: {item.message}
+                    </p>
+
+                    <button onClick={() => editSentMessage(item)}>
+                      Edit Message
+                    </button>
+                  </div>
+                );
+              })
+            )}
+
+            {/* <form
+              onSubmit={() =>
+                editSentMessage(
+                  item.id,
+                  item.username,
+                  item.category,
+                  item.message
+                )
+              }
+              id={item.id}
+            >
+              <input
+                placeholder="username"
+                type="text"
+                value={editUserName}
+                onChange={(event) => SetEditUserName(event.target.value)}
+              />
+              <input
+                placeholder="category"
+                type="text"
+                value={editCategory}
+                onChange={(event) => setEditCategory(event.target.value)}
+              />
+              <input
+                placeholder="message"
+                type="text"
+                value={editMessage}
+                onChange={(event) => setEditMessage(event.target.value)}
+              />
+              <button type="submit">Edit Message</button>
+            </form> */}
+          </div>
+        );
+      })}
 
       <div>
         <button onClick={newMessage}>New Message</button>
