@@ -137,6 +137,22 @@ router.delete("/:id", rejectUnauthenticated, (req, res) => {
 
 //This is the EDIT router for the id to be targeted on a user_id (who is logged in) 
 //to edit messages that were sent and then be able to edit them.
+
+// router.put(`/api/messages/${id}`, editedMessage)
+// .then((response) => {
+//   console.log(response.data);
+//   // If the message was updated successfully, update the messageItems in the state of the component.
+//   setMessageItems((prevItems) =>
+//     prevItems.map((item) => (item.id === id ? editedMessage : item))
+//   );
+//   // Reset the edit form.
+//   setEditUserName("");
+//   setEditCategory("");
+//   setEditMessage("");
+// })
+// .catch((error) => {
+//   console.error(error);
+// });
 router.put("/:id", rejectUnauthenticated, (req, res)=>{
   const sqlText = `UPDATE "message" SET "category" = $1, "message"=$2, "recipient_id"=$3 WHERE  "id"=$4, "user_id"=$5`
   const sqlParams = [req.body.category. req.body.message, req.body.recipient_id, req.params.id, req.user.id]

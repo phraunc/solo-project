@@ -3,7 +3,7 @@ import {takeEvery, put, take} from 'redux-saga/effects';
 
 function* editMessages(action){
 
-    let idForUrl = Number(action.payload.item_id)
+    let idForUrl = Number(action.payload.profile_id)
 
     try{
         yield axios.put(`/api/message/${idForUrl}`,action.payload)

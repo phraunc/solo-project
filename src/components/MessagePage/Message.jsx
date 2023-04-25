@@ -54,11 +54,13 @@ function MessagePage() {
     history.push("/newmessage");
   };
 
+  //This is the edit function of hitting submit after the iputs are filled in.  
+    //I want to change this to this a button with an, onClick function and to go to another page. 
   const editSentMessage = (
-    incommingID,
-    incommingUserName,
-    incommingCategory,
-    incommingMessage
+   editUserName,
+   editCategory,
+   editMessage,
+   incommingID
   ) => {
     if (editUserName === "") {
       setEditUserName(incommingUserName);
@@ -113,7 +115,7 @@ function MessagePage() {
           );
         })}
       <h2>Sent Messages</h2>
-      {sentMessage.length &&
+      {
         sentMessage.map((item) => {
           const timestamp = new Date(item.time_stamp).toLocaleString();
 
@@ -141,7 +143,7 @@ function MessagePage() {
                   value={editUserName}
                   onChange={(event) => SetEditUserName(event.target.value)}
                 />
-                {/* <input
+                <input
                   placeholder="category"
                   type="text"
                   value={editCategory}
@@ -151,16 +153,9 @@ function MessagePage() {
                   placeholder="message"
                   type="text"
                   value={editMessage}
-                  onChange={(event) => setEditMessage(event.target.value)} */}
-                {/* /> */}
-                {/* <button type="submit">Edit Message</button> */}
-               {userID.id === item.id ? (
-                  <button type="submit" id={item.id}>
-                    Edit Message
-                  </button>
-                ) : (
-                  <></>
-                )}
+                  onChange={(event) => setEditMessage(event.target.value)}
+                />
+                <button type="submit">Edit Message</button>
               </form>
             </div>
           );
