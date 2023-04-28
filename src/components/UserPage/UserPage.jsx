@@ -7,8 +7,8 @@ function UserPage() {
   const user = useSelector((store) => store.user);
   return (
     <div className="container">
-      <h2>Welcome, {user.username}!</h2>
-      <p>Your're Amazing!</p>
+      <h2>You're Amazing, {user.username}!</h2>
+      
       <iframe src="https://giphy.com/embed/d7OHjf5B1RK6aoZvY3" width="350" height="350" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/cat-hello-catgrass-d7OHjf5B1RK6aoZvY3">via GIPHY</a></p>
       <LogOutButton className="btn" />
     </div>

@@ -4,14 +4,16 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditMessage from "../EditMessage/EditMessage";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 function MessagePage() {
   //Set up Dispatch
@@ -59,93 +61,169 @@ function MessagePage() {
     history.push("/newmessage");
   };
 
+  // function for getting my two message areas into cards..
+  const bull = (
+    <Box
+      component="span"
+      sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
+    >
+      •
+    </Box>
+  );
+
   return (
     <>
-    <Box sx={{ width: '100%' }}></Box>
-      <div className="container">
-        
-        <h2>Messages</h2>
-      </div>
-      <h2>Recieved Messages</h2>
-      {messageItems.length &&
-        messageItems.map((item) => {
+      <Box sx={{ width: "300%" }}>
+        <div className="container">
+          <h2>Messages</h2>
+        </div>
+        <Card sx={{ maxWidth: 600 }}>
+          <CardContent>
+            <Typography
+              varient="h2"
+              component="h2"
+              color="text.secondary"
+              gutterBottom
+            >
+              Recieved Messages
+            </Typography>
+            <Typography
+              sx={{ fontSize: 12 }}
+              color="text.secondary"
+              gutterBottom
+            />
+
+            {messageItems.length &&
+              messageItems.map((item) => {
+                const timestamp = new Date(item.time_stamp).toLocaleString();
+
+                return (
+                  <div key={item.id}>
+                    <p>
+                      {timestamp}{" "}
+                      <Typography
+                        sx={{ fontSize: 20 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        From: {item.username}
+                      </Typography>{" "}
+                      <Typography sx={{ fontSize: 20 }} color="text.secondary">
+                        Category: {item.category}
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: 15 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Message: {item.message}
+                      </Typography>
+                      {userID.id === item.recipient_id ? (
+                        <CardActions>
+                         <Tooltip
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            id={item.id}
+                            onClick={deleteMessage}
+                          >
+                            Delete
+                          </Tooltip>
+                        </CardActions>
+                      ) : (
+                        <></>
+                      )}
+                    </p>
+                  </div>
+                );
+              })}
+          </CardContent>
+        </Card>
+      </Box>
+      <Box sx={{ width: "300%" }}>
+        <Typography
+          varient="h2"
+          component="h"
+          color="text.secondary"
+          gutterBottom
+        >
+          Sent Messages
+        </Typography>
+        <Card sx={{ maxWidth: 600 }}>
+        <CardContent>
+        {sentMessage.map((item) => {
           const timestamp = new Date(item.time_stamp).toLocaleString();
+          console.log(item);
+
           return (
             <div key={item.id}>
-              <p>
-                {timestamp} From: {item.username} Category: {item.category} :{" "}
-                Message: {item.message}
-                {userID.id === item.recipient_id ? (
+              {messageToEdit.id === item.id ? (
+                <EditMessage
+                  username={messageToEdit.username}
+                  category={messageToEdit.category}
+                  message={messageToEdit.message}
+                  onEditMessage={(editCategory, editMessage) => {
+                    dispatch({
+                      type: "EDIT_MESSAGE",
+                      payload: {
+                        category: editCategory,
+                        message: editMessage,
+                        profile_id: userID.id,
+                        id: messageToEdit.id,
+                      },
+                    });
+                    console.log("message to edit:", messageToEdit);
+                    setMessageToEdit({});
+                  }}
+                />
+              ) : (
+                <div key={item.id}>
+                  <p>
+                    {timestamp}  <Typography
+                        sx={{ fontSize: 20 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >To: {item.username}</Typography> <Typography
+                      sx={{ fontSize: 20 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >Category: {item.category}{" "}</Typography>
+                    {""}
+                    <Typography
+                        sx={{ fontSize: 20 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                    Message: {item.message}</Typography>
+                  </p>
                   <Button
-                    variant="outlined"
-                    startIcon={<DeleteIcon />}
-                    id={item.id}
-                    onClick={deleteMessage}
-                  >
-                    Delete
-                  </Button>
-                ) : (
-                  <></>
-                )}
-              </p>
-
+                            variant="outlined"
+                            
+                            id={item.id}
+                            onClick={() => editSentMessage(item)}
+                          >
+                 
+                    Edit Message
+                 </Button>
+                </div>
+              )}
             </div>
           );
         })}
-      <h2>Sent Messages</h2>
-      {sentMessage.map((item) => {
-        const timestamp = new Date(item.time_stamp).toLocaleString();
-
-        return (
-          <div key={item.id}>
-
-            {messageToEdit.id === item.id ? (
-              <EditMessage
-                username={messageToEdit.username}
-                category={messageToEdit.category}
-                message={messageToEdit.message}
-                onEditMessage={(editCategory, editMessage) => {
-                  dispatch({
-                    type: "EDIT_MESSAGE",
-                    payload: {
-                      category: editCategory,
-                      message: editMessage,
-                      profile_id: userID.id,
-                      id: messageToEdit.id,
-                    },
-                  });
-                  console.log("message to edit:", messageToEdit);
-                  setMessageToEdit({});
-                }}
-              />
-            ) : (
-              <div key={item.id}>
-                <p>
-                  {timestamp} To: {item.username} Category: {item.category}:{" "}
-                  {""}
-                  Message: {item.message}
-                </p>
-
-                <button onClick={() => editSentMessage(item)}>
-                  Edit Message
-                </button>
-              </div>
-            )}
-
-           
-          </div>
-        );
-      })}
-<br>
-</br>
+         </CardContent>
+        </Card>
+      </Box>
+      <br></br>
       <div>
-      <Box sx={{ '& > :not(style)': { m: 1 } }}>
-      
-      <Fab size="medium" color="secondary" aria-label="add" onClick={newMessage}>
-        <AddIcon />
-      </Fab>
-     
-    </Box>
+        <Box sx={{ "& > :not(style)": { m: 1 } }}>
+          <Fab
+            size="medium"
+            color="secondary"
+            aria-label="add"
+            onClick={newMessage}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
       </div>
     </>
   );
