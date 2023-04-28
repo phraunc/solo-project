@@ -4,7 +4,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditMessage from "../EditMessage/EditMessage";
-import { Button } from '@mui/material';
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 function MessagePage() {
   //Set up Dispatch
@@ -52,39 +59,11 @@ function MessagePage() {
     history.push("/newmessage");
   };
 
-  //This is the edit function of hitting submit after the iputs are filled in.
-  //I want to change this to this a button with an, onClick function and to go to another page.
-  // const editSentMessage = (
-  //   editUserName,
-  //   editCategory,
-  //   editMessage,
-  //   incommingID
-  // ) => {
-  //   if (editUserName === "") {
-  //     setEditUserName(incommingUserName);
-  //   }
-
-  //   if (editCategory === "") {
-  //     setEditCategory(incommingCategory);
-  //   }
-
-  //   if (editMessage === "") {
-  //     setEditMessage(incommingMessage);
-  //   }
-  //   dispatch({
-  //     type: "EDIT_MESSAGE",
-  //     payload: {
-  //       username: incommingUserName,
-  //       category: incommingCategory,
-  //       message: incommingMessage,
-  //       profile_id: incommingID,
-  //     },
-  //   });
-  // };
-
   return (
     <>
+    <Box sx={{ width: '100%' }}></Box>
       <div className="container">
+        
         <h2>Messages</h2>
       </div>
       <h2>Recieved Messages</h2>
@@ -96,20 +75,20 @@ function MessagePage() {
               <p>
                 {timestamp} From: {item.username} Category: {item.category} :{" "}
                 Message: {item.message}
-                {/* Taking 'userID' from the store by itself was not fetching the 'user ID'.  I needed to 
-              input userID.id to get the specific id from the store.  userID is the whole object and I just
-              wanted the 'id' portion of the object.  */}
                 {userID.id === item.recipient_id ? (
-                  <Button variant="outlined" startIcon={<DeleteIcon />} id={item.id} onClick={deleteMessage}>
-                  Delete
-                </Button>
-                 
+                  <Button
+                    variant="outlined"
+                    startIcon={<DeleteIcon />}
+                    id={item.id}
+                    onClick={deleteMessage}
+                  >
+                    Delete
+                  </Button>
                 ) : (
                   <></>
                 )}
               </p>
 
-              {/* <button id={item.id}onClick={deleteMessage}>delete</button> */}
             </div>
           );
         })}
@@ -119,79 +98,54 @@ function MessagePage() {
 
         return (
           <div key={item.id}>
-            {/* <p>
-              {timestamp} To: {item.username} Category: {item.category}: {""}
-              Message: {item.message}
-            </p> */}
+
             {messageToEdit.id === item.id ? (
               <EditMessage
                 username={messageToEdit.username}
                 category={messageToEdit.category}
                 message={messageToEdit.message}
-                onEditMessage={(editUserName, editCategory, editMessage) => {
+                onEditMessage={(editCategory, editMessage) => {
                   dispatch({
                     type: "EDIT_MESSAGE",
                     payload: {
-                      username: editUserName,
                       category: editCategory,
                       message: editMessage,
-                      profile_id: messageToEdit.id,
+                      profile_id: userID.id,
+                      id: messageToEdit.id,
                     },
                   });
+                  console.log("message to edit:", messageToEdit);
                   setMessageToEdit({});
                 }}
               />
             ) : (
-                  <div key={item.id}>
-                    <p>
-                      {timestamp} To: {item.username} Category: {item.category}:{" "}
-                      {""}
-                      Message: {item.message}
-                    </p>
+              <div key={item.id}>
+                <p>
+                  {timestamp} To: {item.username} Category: {item.category}:{" "}
+                  {""}
+                  Message: {item.message}
+                </p>
 
-                    <button onClick={() => editSentMessage(item)}>
-                      Edit Message
-                    </button>
-                  </div>
+                <button onClick={() => editSentMessage(item)}>
+                  Edit Message
+                </button>
+              </div>
             )}
 
-            {/* <form
-              onSubmit={() =>
-                editSentMessage(
-                  item.id,
-                  item.username,
-                  item.category,
-                  item.message
-                )
-              }
-              id={item.id}
-            >
-              <input
-                placeholder="username"
-                type="text"
-                value={editUserName}
-                onChange={(event) => SetEditUserName(event.target.value)}
-              />
-              <input
-                placeholder="category"
-                type="text"
-                value={editCategory}
-                onChange={(event) => setEditCategory(event.target.value)}
-              />
-              <input
-                placeholder="message"
-                type="text"
-                value={editMessage}
-                onChange={(event) => setEditMessage(event.target.value)}
-              />
-              <button type="submit">Edit Message</button>
-            </form> */}
+           
           </div>
         );
       })}
-
+<br>
+</br>
       <div>
-        <button onClick={newMessage}>New Message</button>
+      <Box sx={{ '& > :not(style)': { m: 1 } }}>
+      
+      <Fab size="medium" color="secondary" aria-label="add" onClick={newMessage}>
+        <AddIcon />
+      </Fab>
+     
+    </Box>
       </div>
     </>
   );

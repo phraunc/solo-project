@@ -7,6 +7,12 @@ import { InputLabel } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+
+
 
 function NewMessage() {
   const dispatch = useDispatch();
@@ -37,7 +43,7 @@ function NewMessage() {
   };
 
   function handleAlert() {
-    alert("Message Sent!");
+    alert("Message Sent!"); 
   }
 
   return (
@@ -54,7 +60,7 @@ function NewMessage() {
           placeholder="recipient"
         /> */}
         <Box sx={{ minWidth: 50 }}>
-          <FormControl fullWidth>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="recipient">Recipient</InputLabel>
             <Select
               labelId="recipient"
@@ -65,26 +71,13 @@ function NewMessage() {
                 inputNewRecipientId(event.target.value);
               }}
             >
-              <MenuItem value={"13"}>Mom</MenuItem>
-              <MenuItem value={"12"}>Dad</MenuItem>
-              <MenuItem value={"14"}>Olivia</MenuItem>
-              <MenuItem value={"15"}>Haley</MenuItem>
+              <MenuItem value={13}>Mom</MenuItem>
+              <MenuItem value={12}>Dad</MenuItem>
+              <MenuItem value={14}>Olivia</MenuItem>
+              <MenuItem value={15}>Haley</MenuItem>
             </Select>
           </FormControl>
         </Box>
-        {/* <select
-          value={newRecipientId}
-          onChange={(event) => {
-            inputNewRecipientId(event.target.value);
-            console.log(newRecipientId);
-          }}
-        >
-          <option value="">Recipient</option>
-          <option value="13">Mom</option>
-          <option value="12">Dad</option>
-          <option value="14">Olivia</option>
-          <option value="15">Haley</option>
-        </select> */}
         <Box
           component="form"
           sx={{
@@ -93,12 +86,31 @@ function NewMessage() {
           noValidate
           autoComplete="off"
         >
-          <TextField
-            label="Category"
+          <Box sx={{ minWidth: 50 }}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="subject">Subject</InputLabel>
+            <Select
+              labelId="subject"
+              id="subject"
+              value={newCategory}
+              label="subject"
+              onChange={(event) => {
+                setNewCategory(event.target.value);
+              }}
+            >
+              <MenuItem value={"Family"}>Family</MenuItem>
+              <MenuItem value={"Appearence"}>Appearence</MenuItem>
+              <MenuItem value={"School"}>School</MenuItem>
+              <MenuItem value={"Just Because"}>Just Because</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+          {/* <TextField
+            label="Subject"
             variant="outlined"
             value={newCategory}
             onChange={(event) => setNewCategory(event.target.value)}
-          />
+          /> */}
           <TextField
             label="New Message"
             variant="outlined"
@@ -124,6 +136,10 @@ function NewMessage() {
           onChange={(event) => inputNewProfileId(event.target.value)}
           placeholder="sender"
         /> */}
+
+{/* <Button variant="contained" endIcon={<SendIcon />} type="submit" onClick={handleAlert}>
+  Send
+</Button> */}
         <button type="submit" onClick={handleAlert}>
           Submit
         </button>

@@ -12,7 +12,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
   JOIN "user"
   ON "message".profile_id = "user".id
-  WHERE recipient_id = $1 LIMIT 5`;
+  WHERE recipient_id = $1`;
   const sqlParams = [req.user.id];
 
   pool
@@ -33,7 +33,7 @@ router.get("/sent", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT "message".id, "message".time_stamp, "message".category, "message".message, "message".profile_id, "message".recipient_id, "user".username FROM "message" 
   JOIN "user"
   ON "message".profile_id = "user".id
-  WHERE profile_id = $1 LIMIT 5`;
+  WHERE profile_id = $1`;
   const sqlParams = [req.user.id];
 
   pool

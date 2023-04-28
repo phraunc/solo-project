@@ -3,12 +3,12 @@ import {takeEvery, put, take} from 'redux-saga/effects';
 
 function* editMessages(action){
 
-    let idForUrl = Number(action.payload.profile_id)
+    let idForUrl = Number(action.payload.id)
 
     try{
         yield axios.put(`/api/message/${idForUrl}`,action.payload)
 
-        yield put({type:'FETCH_MESSAGE'})
+        yield put({type:'SENT_MESSAGE_AGAIN'})
     }catch(err){
         console.log('error editting messages', err)
     }
