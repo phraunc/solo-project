@@ -4,7 +4,12 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditMessage from "../EditMessage/EditMessage";
-import { Button, Tooltip } from "@mui/material";
+import {
+  AccordionActions,
+  AccordionSummary,
+  Button,
+  Tooltip,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
@@ -14,6 +19,27 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0,
+  },
+  "&:before": {
+    display: "none",
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(0, 0, 0, .125)",
+}));
 
 function MessagePage() {
   //Set up Dispatch
@@ -87,6 +113,7 @@ function MessagePage() {
             >
               Recieved Messages
             </Typography>
+
             <Typography
               sx={{ fontSize: 12 }}
               color="text.secondary"
@@ -120,7 +147,7 @@ function MessagePage() {
                       </Typography>
                       {userID.id === item.recipient_id ? (
                         <CardActions>
-                         <Tooltip
+                          <Tooltip
                             variant="outlined"
                             startIcon={<DeleteIcon />}
                             id={item.id}
@@ -149,67 +176,77 @@ function MessagePage() {
           Sent Messages
         </Typography>
         <Card sx={{ maxWidth: 600 }}>
-        <CardContent>
-        {sentMessage.map((item) => {
-          const timestamp = new Date(item.time_stamp).toLocaleString();
-          console.log(item);
+          <CardContent>
+            {sentMessage.map((item) => {
+              const timestamp = new Date(item.time_stamp).toLocaleString();
+              console.log(item);
 
-          return (
-            <div key={item.id}>
-              {messageToEdit.id === item.id ? (
-                <EditMessage
-                  username={messageToEdit.username}
-                  category={messageToEdit.category}
-                  message={messageToEdit.message}
-                  onEditMessage={(editCategory, editMessage) => {
-                    dispatch({
-                      type: "EDIT_MESSAGE",
-                      payload: {
-                        category: editCategory,
-                        message: editMessage,
-                        profile_id: userID.id,
-                        id: messageToEdit.id,
-                      },
-                    });
-                    console.log("message to edit:", messageToEdit);
-                    setMessageToEdit({});
-                  }}
-                />
-              ) : (
+              return (
                 <div key={item.id}>
-                  <p>
-                    {timestamp}  <Typography
-                        sx={{ fontSize: 20 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >To: {item.username}</Typography> <Typography
-                      sx={{ fontSize: 20 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >Category: {item.category}{" "}</Typography>
-                    {""}
-                    <Typography
-                        sx={{ fontSize: 20 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                    Message: {item.message}</Typography>
-                  </p>
-                  <Button
+                  {messageToEdit.id === item.id ? (
+                    <EditMessage
+                      username={messageToEdit.username}
+                      category={messageToEdit.category}
+                      message={messageToEdit.message}
+                      onEditMessage={(editCategory, editMessage) => {
+                        dispatch({
+                          type: "EDIT_MESSAGE",
+                          payload: {
+                            category: editCategory,
+                            message: editMessage,
+                            profile_id: userID.id,
+                            id: messageToEdit.id,
+                          },
+                        });
+                        console.log("message to edit:", messageToEdit);
+                        setMessageToEdit({});
+                      }}
+                    />
+                  ) : (
+                    <div key={item.id}>
+                      <Accordion>
+                        <AccordionSummary>
+                          {timestamp}
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            To: {item.recipient_username}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            Category: {item.category}{" "}
+                          </Typography>
+                          {""}
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            Message: {item.message}
+                          </Typography>
+
+                          <Button
                             variant="outlined"
-                            
                             id={item.id}
                             onClick={() => editSentMessage(item)}
                           >
-                 
-                    Edit Message
-                 </Button>
+                            Edit Message
+                          </Button>
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
-         </CardContent>
+              );
+            })}
+          </CardContent>
         </Card>
       </Box>
       <br></br>

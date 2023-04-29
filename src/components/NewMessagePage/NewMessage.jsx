@@ -140,9 +140,12 @@ function NewMessage() {
 {/* <Button variant="contained" endIcon={<SendIcon />} type="submit" onClick={handleAlert}>
   Send
 </Button> */}
-        <button type="submit" onClick={handleAlert}>
+        <Button variant="contained" endIcon={<SendIcon />} type="submit" onClick={handleAlert}>
+  Send
+</Button>
+        {/* <button type="submit" onClick={handleAlert}>
           Submit
-        </button>
+        </button> */}
       </form>
     </>
   );
