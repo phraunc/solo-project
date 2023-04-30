@@ -4,12 +4,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditMessage from "../EditMessage/EditMessage";
-import {
-  AccordionActions,
-  AccordionSummary,
-  Button,
-  Tooltip,
-} from "@mui/material";
+import { AccordionActions, Button, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
@@ -33,6 +28,25 @@ const Accordion = styled((props) => (
   },
   "&:before": {
     display: "none",
+  },
+}));
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, .05)"
+      : "rgba(0, 0, 0, .03)",
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -127,38 +141,48 @@ function MessagePage() {
                 return (
                   <div key={item.id}>
                     <p>
-                      {timestamp}{" "}
-                      <Typography
-                        sx={{ fontSize: 20 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        From: {item.username}
-                      </Typography>{" "}
-                      <Typography sx={{ fontSize: 20 }} color="text.secondary">
-                        Category: {item.category}
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 15 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        Message: {item.message}
-                      </Typography>
-                      {userID.id === item.recipient_id ? (
-                        <CardActions>
-                          <Tooltip
-                            variant="outlined"
-                            startIcon={<DeleteIcon />}
-                            id={item.id}
-                            onClick={deleteMessage}
+                      <Accordion>
+                        <AccordionSummary>
+                          {timestamp}{" "}
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
                           >
-                            Delete
-                          </Tooltip>
-                        </CardActions>
-                      ) : (
-                        <></>
-                      )}
+                            From: {item.username}
+                          </Typography>{" "}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                          >
+                            Category: {item.category}
+                          </Typography>
+
+                          <Typography
+                            sx={{ fontSize: 15 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            Message: {item.message}
+                          </Typography>
+                          {userID.id === item.recipient_id ? (
+                            <CardActions>
+                              <Tooltip
+                                variant="outlined"
+                                startIcon={<DeleteIcon />}
+                                id={item.id}
+                                onClick={deleteMessage}
+                              >
+                                Delete
+                              </Tooltip>
+                            </CardActions>
+                          ) : (
+                            <></>
+                          )}
+                        </AccordionDetails>
+                      </Accordion>
                     </p>
                   </div>
                 );
