@@ -143,7 +143,25 @@ function MessagePage() {
                     <p>
                       <Accordion>
                         <AccordionSummary>
-                          {timestamp}{" "}
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            {timestamp}
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
                           <Typography
                             sx={{ fontSize: 20 }}
                             color="text.secondary"
@@ -169,14 +187,14 @@ function MessagePage() {
                           </Typography>
                           {userID.id === item.recipient_id ? (
                             <CardActions>
-                              <Tooltip
+                              <Button
                                 variant="outlined"
                                 startIcon={<DeleteIcon />}
                                 id={item.id}
                                 onClick={deleteMessage}
                               >
                                 Delete
-                              </Tooltip>
+                              </Button>
                             </CardActions>
                           ) : (
                             <></>
@@ -230,7 +248,29 @@ function MessagePage() {
                     <div key={item.id}>
                       <Accordion>
                         <AccordionSummary>
-                          {timestamp}
+                          <Typography
+                            sx={{ fontSize: 20 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            {timestamp}
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+                          <Typography varient="body" color="inherit">
+                            &nbsp;
+                          </Typography>
+
                           <Typography
                             sx={{ fontSize: 20 }}
                             color="text.secondary"
@@ -286,6 +326,7 @@ function MessagePage() {
           </Fab>
         </Box>
       </div>
+      
     </>
   );
 }
