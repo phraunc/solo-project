@@ -230,6 +230,7 @@ function MessagePage() {
                       username={messageToEdit.username}
                       category={messageToEdit.category}
                       message={messageToEdit.message}
+                      recipient_username={messageToEdit.recipient_username}
                       onEditMessage={(editCategory, editMessage) => {
                         dispatch({
                           type: "EDIT_MESSAGE",

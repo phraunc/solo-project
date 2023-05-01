@@ -12,7 +12,7 @@ function EditMessage(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <span>To:{props.username}</span>
+      <span>To:{props.recipient_username}</span>
       <input
         placeholder="category"
         type="text"
