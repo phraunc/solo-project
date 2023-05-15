@@ -71,10 +71,10 @@ function NewMessage() {
                 inputNewRecipientId(event.target.value);
               }}
             >
-              <MenuItem value={13}>Mom</MenuItem>
-              <MenuItem value={12}>Dad</MenuItem>
-              <MenuItem value={14}>Olivia</MenuItem>
-              <MenuItem value={15}>Haley</MenuItem>
+              <MenuItem value={2}>Mom</MenuItem>
+              <MenuItem value={1}>Dad</MenuItem>
+              <MenuItem value={3}>Olivia</MenuItem>
+              <MenuItem value={4}>Haley</MenuItem>
             </Select>
           </FormControl>
         </Box>
